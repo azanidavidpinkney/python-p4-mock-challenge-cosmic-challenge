@@ -83,12 +83,18 @@ class Mission(db.Model, SerializerMixin):
     
     @validates('planet_id')
     def validates_planet_id(self, key, planet_id):
+        planet = Planet.query.get(planet_id)
+        if not planet:
+            raise ValueError("Planet id must reference an existing planet.")
         if not planet_id:
             raise ValueError("Missions must have a planet.")
         return planet_id
     
     @validates('scientist_id')
     def validates_scientist_id(self, key, scientist_id):
+        scientist = Scientist.query.get(scientist_id)
+        if not scientist:
+            raise ValueError("Scientist id must reference an existing scientist.")
         if not scientist_id:
             raise ValueError("Missions must have a scientist.")
         return scientist_id
